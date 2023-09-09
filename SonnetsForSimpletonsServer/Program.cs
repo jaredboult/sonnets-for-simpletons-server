@@ -17,6 +17,9 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddSingleton<IRoomFacade, RoomFacade>();
+builder.Services.AddSingleton<IRoomCodeGenerator, RoomCodeGenerator>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

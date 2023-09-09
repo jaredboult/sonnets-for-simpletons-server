@@ -1,6 +1,6 @@
-namespace SonnetsForSimpletonsServer.Models;
+namespace SonnetsForSimpletonsServer.Models.Messages;
 
-public class GeneralResponse : IGeneralResponse
+public class GeneralResponse
 {
     public bool Success { get; set; }
     public string Description { get; set; } = "An error occurred";

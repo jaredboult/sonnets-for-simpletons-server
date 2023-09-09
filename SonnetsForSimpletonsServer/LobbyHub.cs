@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.SignalR;
-using SonnetsForSimpletonsServer.Models.LobbyResponses;
+using SonnetsForSimpletonsServer.Models.Messages;
 
 namespace SonnetsForSimpletonsServer;
 
 public class LobbyHub : Hub
 {
-    private const string GeneratedRoomId = "ABCD";
+    private const string GeneratedRoomCode = "ABCD";
+    private readonly IRoomFacade _roomFacade;
+
+    public LobbyHub(IRoomFacade roomFacade)
+    {
+        _roomFacade = roomFacade;
+    }
     
     public override async Task OnConnectedAsync()
     {
@@ -14,22 +20,36 @@ public class LobbyHub : Hub
 
     public async Task CreateRoom()
     {
-        await Clients.Caller.SendAsync("CreateRoom", GeneratedRoomId);
+        var response = new RoomResponse();
+        try
+        {
+            var room = _roomFacade.CreateRoom();
+            response.RoomId = room.RoomCode;
+            response.Success = true;
+        }
+        catch (ApplicationException ex)
+        {
+            response.Success = false;
+            response.Description = ex.Message == "Room limit reached" 
+                ? "Sorry, all rooms are full, try again later"
+                : "An error occurred while creating a room";
+        }
+        await Clients.Caller.SendAsync("CreateRoom", response);
     }
 
     public async Task JoinRoom(string roomId)
     {
-        var response = new JoinRoomResponse();
-        if (roomId == GeneratedRoomId)
+        var response = new RoomResponse();
+        if (_roomFacade.JoinRoom(roomId))
         {
             response.Success = true;
             response.Description = "Room joined";
-            response.RoomId = GeneratedRoomId;
+            response.RoomId = roomId;
         }
         else
         {
             response.Success = false;
-            response.Description = "Invalid room code   ";
+            response.Description = "Invalid room code";
         }
         await Clients.Caller.SendAsync("JoinRoom", response);
     }
