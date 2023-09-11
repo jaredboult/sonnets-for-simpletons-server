@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton<IRoomFacade, RoomFacade>();
 builder.Services.AddSingleton<IRoomCodeGenerator, RoomCodeGenerator>();
+builder.Services.AddSingleton<IPlayerFacade, PlayerFacade>();
 
 var app = builder.Build();
 

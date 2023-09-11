@@ -5,12 +5,13 @@ namespace SonnetsForSimpletonsServer;
 
 public class LobbyHub : Hub
 {
-    private const string GeneratedRoomCode = "ABCD";
     private readonly IRoomFacade _roomFacade;
+    private readonly IPlayerFacade _playerFacade;
 
-    public LobbyHub(IRoomFacade roomFacade)
+    public LobbyHub(IRoomFacade roomFacade, IPlayerFacade playerFacade)
     {
         _roomFacade = roomFacade;
+        _playerFacade = playerFacade;
     }
     
     public override async Task OnConnectedAsync()
@@ -23,7 +24,8 @@ public class LobbyHub : Hub
         var response = new RoomResponse();
         try
         {
-            var room = _roomFacade.CreateRoom();
+            var player = _playerFacade.CreatePlayer(Context.ConnectionId);
+            var room = _roomFacade.CreateRoom(player);
             response.RoomId = room.RoomCode;
             response.Success = true;
         }
@@ -34,13 +36,14 @@ public class LobbyHub : Hub
                 ? "Sorry, all rooms are full, try again later"
                 : "An error occurred while creating a room";
         }
-        await Clients.Caller.SendAsync("CreateRoom", response);
+        await Clients.Caller.SendAsync("CreateRoomResponse", response);
     }
 
     public async Task JoinRoom(string roomId)
     {
         var response = new RoomResponse();
-        if (_roomFacade.JoinRoom(roomId))
+        var joiner = _playerFacade.CreatePlayer(Context.ConnectionId);
+        if (_roomFacade.JoinRoom(joiner, roomId))
         {
             response.Success = true;
             response.Description = "Room joined";
@@ -51,6 +54,23 @@ public class LobbyHub : Hub
             response.Success = false;
             response.Description = "Invalid room code";
         }
-        await Clients.Caller.SendAsync("JoinRoom", response);
+        await Clients.Caller.SendAsync("JoinRoomResponse", response);
+    }
+
+    public async Task UpdatePlayerName(string name)
+    {
+        var response = new PlayerResponse();
+        try
+        {
+            _playerFacade.UpdatePlayerName(name, Context.ConnectionId);
+            response.Success = true;
+            response.Name = name;
+        }
+        catch (ApplicationException ex)
+        {
+            response.Success = false;
+            response.Description = ex.Message;
+        }
+        await Clients.Caller.SendAsync("UpdatePlayerNameResponse", response);
     }
 }

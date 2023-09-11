@@ -3,5 +3,5 @@ namespace SonnetsForSimpletonsServer.Models.Messages;
 public class GeneralResponse
 {
     public bool Success { get; set; }
-    public string Description { get; set; } = "An error occurred";
+    public string Description { get; set; } = "";
 }

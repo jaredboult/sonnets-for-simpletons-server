@@ -1,3 +1,4 @@
+using SonnetsForSimpletonsServer.Models;
 using SonnetsForSimpletonsServer.Models.Lobby;
 
 namespace SonnetsForSimpletonsServer;
@@ -11,13 +12,14 @@ public interface IRoomFacade
     /// Creates a new room 
     /// </summary>
     /// <throws>An ApplicationException if the room limit is reached</throws>
-    /// <returns>A new IRoom object if succesful</returns>
-    public Room CreateRoom();
+    /// <returns>A new IRoom object if successful</returns>
+    public Room CreateRoom(Player host);
     
     /// <summary>
     /// Joins a room, if it exists
     /// </summary>
+    /// <param name="joiner">The Player who is attempting to join using a room code</param>
     /// <param name="roomCode">The four letter room code</param>
     /// <returns>True if the room exists and can be joined, false otherwise.</returns>
-    public bool JoinRoom(string roomCode);
+    public bool JoinRoom(Player joiner, string roomCode);
 }

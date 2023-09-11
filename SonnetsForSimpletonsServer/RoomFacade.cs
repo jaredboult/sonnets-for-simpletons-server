@@ -1,3 +1,4 @@
+using SonnetsForSimpletonsServer.Models;
 using SonnetsForSimpletonsServer.Models.Lobby;
 using ApplicationException = System.ApplicationException;
 
@@ -17,7 +18,7 @@ public class RoomFacade : IRoomFacade
         _roomCodeGenerator = roomCodeGenerator;
     }
     
-    public Room CreateRoom()
+    public Room CreateRoom(Player host)
     {
         if (_roomCodesInUse.Count >= MaxRooms)
         {
@@ -25,28 +26,26 @@ public class RoomFacade : IRoomFacade
         }
         
         var roomCode = _roomCodeGenerator.GenerateRoomCode();
+        
         while (!_roomCodesInUse.Add(roomCode))
         {
             roomCode = _roomCodeGenerator.GenerateRoomCode();
         }
-
-        var createdRoom = new Room { RoomCode = roomCode };
-        _rooms.Add(roomCode, createdRoom);
         
-        return createdRoom;
+        var room = new Room { RoomCode = roomCode };
+        _rooms.Add(roomCode, room);
+        
+        room.AddPlayer(host);
+        return room;
     }
 
-    public bool JoinRoom(string roomCode)
+    public bool JoinRoom(Player joiner, string roomCode)
     {
         var room = GetRoom(roomCode);
-        return room != null;
+        room?.AddPlayer(joiner);
+        return room is not null;
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="roomCode"></param>
-    /// <returns></returns>
+    
     private Room? GetRoom(string roomCode)
     {
         return _rooms.TryGetValue(roomCode, out var room) ? room : null;
