@@ -3,7 +3,7 @@ using SonnetsForSimpletonsServer.Models.Messages;
 
 namespace SonnetsForSimpletonsServer;
 
-public class LobbyHub : Hub
+public class LobbyHub : Hub<ILobbyHub>
 {
     private readonly IRoomFacade _roomFacade;
     private readonly IPlayerFacade _playerFacade;
@@ -12,11 +12,6 @@ public class LobbyHub : Hub
     {
         _roomFacade = roomFacade;
         _playerFacade = playerFacade;
-    }
-    
-    public override async Task OnConnectedAsync()
-    {
-        await Clients.All.SendAsync("ReceiveMessage", $"{DateTime.Now} - A new client has connected");
     }
 
     public async Task CreateRoom()
@@ -36,7 +31,8 @@ public class LobbyHub : Hub
                 ? "Sorry, all rooms are full, try again later"
                 : "An error occurred while creating a room";
         }
-        await Clients.Caller.SendAsync("CreateRoomResponse", response);
+
+        await Clients.Caller.CreateRoom(response);
     }
 
     public async Task JoinRoom(string roomId)
@@ -54,7 +50,8 @@ public class LobbyHub : Hub
             response.Success = false;
             response.Description = "Invalid room code";
         }
-        await Clients.Caller.SendAsync("JoinRoomResponse", response);
+
+        await Clients.Caller.JoinRoom(response);
     }
 
     public async Task UpdatePlayerName(string name)
@@ -71,6 +68,7 @@ public class LobbyHub : Hub
             response.Success = false;
             response.Description = ex.Message;
         }
-        await Clients.Caller.SendAsync("UpdatePlayerNameResponse", response);
+
+        await Clients.Caller.UpdatePlayerName(response);
     }
 }

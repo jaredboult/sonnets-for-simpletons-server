@@ -9,7 +9,7 @@ public class PlayerFacade : IPlayerFacade
     public Player CreatePlayer(string connectionId)
     {
         var player = new Player(connectionId);
-        _players.Add(connectionId, player);
+        _players.TryAdd(connectionId, player);
         return player;
     }
     
@@ -29,6 +29,6 @@ public class PlayerFacade : IPlayerFacade
 
     private static bool ValidatePlayerName(string name)
     {
-        return name.Length is > 1 and < 20;
+        return name.Length is > 1 and < 30;
     }
 }
