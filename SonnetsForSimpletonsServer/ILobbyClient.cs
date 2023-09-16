@@ -2,7 +2,7 @@
 
 namespace SonnetsForSimpletonsServer;
 
-public interface ILobbyHub
+public interface ILobbyClient
 {
     public Task CreateRoom(RoomResponse response);
     public Task JoinRoom(RoomResponse response);

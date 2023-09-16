@@ -3,7 +3,7 @@ using SonnetsForSimpletonsServer.Models.Messages;
 
 namespace SonnetsForSimpletonsServer;
 
-public class LobbyHub : Hub<ILobbyHub>
+public class LobbyHub : Hub<ILobbyClient>
 {
     private readonly IRoomFacade _roomFacade;
     private readonly IPlayerFacade _playerFacade;
