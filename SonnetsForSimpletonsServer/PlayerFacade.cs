@@ -1,10 +1,11 @@
+using System.Collections.Concurrent;
 using SonnetsForSimpletonsServer.Models;
 
 namespace SonnetsForSimpletonsServer;
 
 public class PlayerFacade : IPlayerFacade
 {
-    private readonly Dictionary<string, Player> _players = new ();
+    private readonly ConcurrentDictionary<string, Player> _players = new ();
 
     public Player CreatePlayer(string connectionId)
     {

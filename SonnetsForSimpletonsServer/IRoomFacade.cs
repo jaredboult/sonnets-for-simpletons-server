@@ -19,7 +19,14 @@ public interface IRoomFacade
     /// Joins a room, if it exists
     /// </summary>
     /// <param name="joiner">The Player who is attempting to join using a room code</param>
-    /// <param name="roomCode">The four letter room code</param>
+    /// <param name="roomCode">The unique four letter room code</param>
     /// <returns>True if the room exists and can be joined, false otherwise.</returns>
     public bool JoinRoom(Player joiner, string roomCode);
+
+    /// <summary>
+    /// Returns a room with the matching roomCode, if it exists.
+    /// </summary>
+    /// <param name="roomCode">The unique four digit room code</param>
+    /// <returns>A room object if it exists, otherwise null</returns>
+    public Room? GetRoom(string roomCode);
 }

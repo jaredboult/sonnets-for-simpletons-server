@@ -3,7 +3,7 @@ namespace SonnetsForSimpletonsServer.Models.Lobby;
 public class Room
 {
     public string RoomCode { get; init; } = "";
-    private List<Player> Players { get; } = new ();
+    public IList<Player> Players { get; } = new List<Player>();
 
     public void AddPlayer(Player player)
     {
