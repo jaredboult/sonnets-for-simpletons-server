@@ -13,23 +13,32 @@ public class PlayerFacade : IPlayerFacade
         _players.TryAdd(connectionId, player);
         return player;
     }
-    
-    public bool UpdatePlayerName(string name, string connectionId)
+
+    public Player? GetPlayer(string connectionId)
     {
-        if (!_players.TryGetValue(connectionId, out var player))
+        _players.TryGetValue(connectionId, out var player);
+        return player;
+    }
+    
+    public string? UpdatePlayerName(string name, string connectionId)
+    {
+        var player = GetPlayer(connectionId);
+        if (player is null)
         {
             throw new ApplicationException("Player with matching connection id does not exist");
         }
-        var namePassedValidation = ValidatePlayerName(name);
-        if (namePassedValidation)
+        var trimmedName = name.Trim();
+        var namePassedValidation = ValidatePlayerName(trimmedName);
+        if (!namePassedValidation)
         {
-            player.Name = name;
+            return null;
         }
-        return namePassedValidation;
+        player.Name = trimmedName;
+        return trimmedName;
     }
 
     private static bool ValidatePlayerName(string name)
     {
-        return name.Length is > 1 and < 30;
+        return name.Length is > 0 and < 30;
     }
 }

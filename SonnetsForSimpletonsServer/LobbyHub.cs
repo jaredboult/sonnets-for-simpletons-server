@@ -60,9 +60,19 @@ public class LobbyHub : Hub<ILobbyClient>
         var response = new PlayerResponse();
         try
         {
-            _playerFacade.UpdatePlayerName(name, Context.ConnectionId);
-            response.Success = true;
-            response.Name = name;
+            var validatedName = _playerFacade.UpdatePlayerName(name, Context.ConnectionId);
+            if (validatedName is not null)
+            {
+                response.Success = true;
+                response.Name = validatedName;
+                response.Description = "Name was set to " + validatedName;
+            }
+            else
+            {
+                response.Success = false;
+                response.Description = "Choose a different name";
+            }
+            
         }
         catch (ApplicationException ex)
         {
@@ -71,20 +81,25 @@ public class LobbyHub : Hub<ILobbyClient>
         }
 
         await Clients.Caller.UpdatePlayerName(response);
-        await UpdateRoomDetails(roomId);
+        if (response.Success)
+        {
+            await UpdateRoomDetails(roomId);
+        }
     }
 
     public async Task GetRoomDetails(string roomId)
     {
         var response = GetRoomResponse(roomId);
+        response.Description = "Getting the room details for single client";
         await Clients.Caller.ReceiveRoomDetails(response);
     }
 
-    public async Task UpdateRoomDetails(string groupName)
+    private async Task UpdateRoomDetails(string groupName)
     {
         // Right now the only group names are roomIds,
         // I will need to add validation here if that stops being true
         var response = GetRoomResponse(groupName);
+        response.Description = "Updating the room details for everyone";
         await Clients.Group(groupName).ReceiveRoomDetails(response);
     }
 
@@ -97,7 +112,7 @@ public class LobbyHub : Hub<ILobbyClient>
             response.Success = true;
             response.RoomId = roomId;
             response.PlayerNames = room.Players
-                .Select(p => p.Name)
+                .Select(player => player.Name)
                 .ToList();
         }
         else
