@@ -14,7 +14,7 @@ public interface IRoomFacade
     /// <throws>An ApplicationException if the room limit is reached</throws>
     /// <returns>A new IRoom object if successful</returns>
     public Room CreateRoom(Player host);
-    
+
     /// <summary>
     /// Joins a room, if it exists
     /// </summary>

@@ -5,7 +5,7 @@ namespace SonnetsForSimpletonsServer;
 public interface IPlayerFacade
 {
     public Player CreatePlayer(string connectionId);
-    
+
     /// <summary>
     /// Performs some validation before updating a Player's name.
     /// </summary>

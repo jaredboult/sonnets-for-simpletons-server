@@ -28,7 +28,7 @@ public class LobbyHub : Hub<ILobbyClient>
         catch (ApplicationException ex)
         {
             response.Success = false;
-            response.Description = ex.Message == "Room limit reached" 
+            response.Description = ex.Message == "Room limit reached"
                 ? "Sorry, all rooms are full, try again later"
                 : "An error occurred while creating a room";
         }
@@ -72,7 +72,7 @@ public class LobbyHub : Hub<ILobbyClient>
                 response.Success = false;
                 response.Description = "Choose a different name";
             }
-            
+
         }
         catch (ApplicationException ex)
         {

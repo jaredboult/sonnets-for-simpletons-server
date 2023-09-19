@@ -5,7 +5,7 @@ namespace SonnetsForSimpletonsServer;
 
 public class PlayerFacade : IPlayerFacade
 {
-    private readonly ConcurrentDictionary<string, Player> _players = new ();
+    private readonly ConcurrentDictionary<string, Player> _players = new();
 
     public Player CreatePlayer(string connectionId)
     {
@@ -19,7 +19,7 @@ public class PlayerFacade : IPlayerFacade
         _players.TryGetValue(connectionId, out var player);
         return player;
     }
-    
+
     public string? UpdatePlayerName(string name, string connectionId)
     {
         var player = GetPlayer(connectionId);
