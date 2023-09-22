@@ -1,15 +1,15 @@
 using System.Collections.Concurrent;
-using SonnetsForSimpletonsServer.Models;
-using SonnetsForSimpletonsServer.Models.Lobby;
+using SonnetsForSimpletonsServer.Lobby.Models;
+using SonnetsForSimpletonsServer.Player.Models;
 using ApplicationException = System.ApplicationException;
 
-namespace SonnetsForSimpletonsServer;
+namespace SonnetsForSimpletonsServer.Lobby;
 
 public class RoomFacade : IRoomFacade
 {
     private readonly IRoomCodeGenerator _roomCodeGenerator;
     private readonly HashSet<string> _activeRoomCodes = new();
-    private readonly ConcurrentDictionary<string, Room> _rooms = new();
+    private readonly ConcurrentDictionary<string, IRoom> _rooms = new();
 
     /* Setting an arbitrary maximum of 1,000 rooms for now */
     private const int MaxRooms = 1_000;
@@ -19,7 +19,7 @@ public class RoomFacade : IRoomFacade
         _roomCodeGenerator = roomCodeGenerator;
     }
 
-    public Room CreateRoom(Player host)
+    public IRoom CreateRoom(IPlayer host)
     {
         if (_activeRoomCodes.Count >= MaxRooms)
         {
@@ -44,14 +44,14 @@ public class RoomFacade : IRoomFacade
         return room;
     }
 
-    public bool JoinRoom(Player joiner, string roomCode)
+    public bool JoinRoom(IPlayer joiner, string roomCode)
     {
         var room = GetRoom(roomCode);
         room?.AddPlayer(joiner);
         return room is not null;
     }
 
-    public Room? GetRoom(string roomCode)
+    public IRoom? GetRoom(string roomCode)
     {
         return _rooms.TryGetValue(roomCode, out var room) ? room : null;
     }

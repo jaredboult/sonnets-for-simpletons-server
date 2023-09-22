@@ -1,4 +1,7 @@
-using SonnetsForSimpletonsServer;
+using SonnetsForSimpletonsServer.Lobby;
+using SonnetsForSimpletonsServer.Lobby.Models;
+using SonnetsForSimpletonsServer.Player;
+using SonnetsForSimpletonsServer.Player.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IRoomFacade, RoomFacade>();
 builder.Services.AddSingleton<IRoomCodeGenerator, RoomCodeGenerator>();
 builder.Services.AddSingleton<IPlayerFacade, PlayerFacade>();
+builder.Services.AddTransient<IPlayer, Player>();
+builder.Services.AddTransient<IRoom, Room>();
 
 var app = builder.Build();
 

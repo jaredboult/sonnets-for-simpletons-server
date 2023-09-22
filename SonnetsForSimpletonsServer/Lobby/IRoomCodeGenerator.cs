@@ -1,4 +1,4 @@
-namespace SonnetsForSimpletonsServer;
+namespace SonnetsForSimpletonsServer.Lobby;
 
 /// <summary>
 /// Generates the unique room codes for each room

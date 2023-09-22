@@ -1,20 +1,26 @@
 using System.Collections.Concurrent;
-using SonnetsForSimpletonsServer.Models;
+using SonnetsForSimpletonsServer.Player.Models;
 
-namespace SonnetsForSimpletonsServer;
+namespace SonnetsForSimpletonsServer.Player;
 
 public class PlayerFacade : IPlayerFacade
 {
-    private readonly ConcurrentDictionary<string, Player> _players = new();
+    private readonly ConcurrentDictionary<string, IPlayer> _players = new();
 
-    public Player CreatePlayer(string connectionId)
+    public IPlayer CreatePlayer(string connectionId)
     {
-        var player = new Player(connectionId);
-        _players.TryAdd(connectionId, player);
+        var player = new Models.Player {
+            ConnectionId = connectionId
+        };
+        if (!_players.TryAdd(connectionId, player))
+        {
+            _players.TryGetValue(connectionId, out var existingPlayer);
+            _players.TryUpdate(connectionId, player, existingPlayer ?? new Models.Player());
+        }
         return player;
     }
 
-    public Player? GetPlayer(string connectionId)
+    public IPlayer? GetPlayer(string connectionId)
     {
         _players.TryGetValue(connectionId, out var player);
         return player;

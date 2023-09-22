@@ -1,4 +1,4 @@
-namespace SonnetsForSimpletonsServer.Models.Messages;
+namespace SonnetsForSimpletonsServer.Lobby.Responses;
 
 public class GeneralResponse
 {

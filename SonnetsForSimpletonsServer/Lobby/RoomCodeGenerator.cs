@@ -1,4 +1,4 @@
-namespace SonnetsForSimpletonsServer;
+namespace SonnetsForSimpletonsServer.Lobby;
 
 public class RoomCodeGenerator : IRoomCodeGenerator
 {

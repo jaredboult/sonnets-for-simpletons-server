@@ -1,10 +1,10 @@
-using SonnetsForSimpletonsServer.Models;
+using SonnetsForSimpletonsServer.Player.Models;
 
-namespace SonnetsForSimpletonsServer;
+namespace SonnetsForSimpletonsServer.Player;
 
 public interface IPlayerFacade
 {
-    public Player CreatePlayer(string connectionId);
+    public IPlayer CreatePlayer(string connectionId);
 
     /// <summary>
     /// Performs some validation before updating a Player's name.
@@ -19,5 +19,5 @@ public interface IPlayerFacade
     /// </summary>
     /// <param name="connectionId"></param>
     /// <returns>The Player object if a match is found, otherwise null</returns>
-    public Player? GetPlayer(string connectionId);
+    public IPlayer? GetPlayer(string connectionId);
 }
