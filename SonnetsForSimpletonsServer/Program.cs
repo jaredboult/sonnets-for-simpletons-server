@@ -1,3 +1,4 @@
+using SonnetsForSimpletonsServer.Game;
 using SonnetsForSimpletonsServer.Lobby;
 using SonnetsForSimpletonsServer.Lobby.Models;
 using SonnetsForSimpletonsServer.Player;
@@ -36,5 +37,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.MapHub<LobbyHub>("connect");
+app.MapHub<SonnetsForSimpletonsHub>("sonnets");
 
 app.Run();

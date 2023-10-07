@@ -5,30 +5,36 @@ namespace SonnetsForSimpletonsServer.Player;
 
 public class PlayerFacade : IPlayerFacade
 {
-    private readonly ConcurrentDictionary<string, IPlayer> _players = new();
+    private readonly ConcurrentDictionary<Guid, IPlayer> _players = new();
 
     public IPlayer CreatePlayer(string connectionId)
     {
+        var id = Guid.NewGuid();
         var player = new Models.Player {
-            ConnectionId = connectionId
+            ConnectionId = connectionId,
+            Id = id
         };
-        if (!_players.TryAdd(connectionId, player))
+        if (!_players.TryAdd(id, player))
         {
-            _players.TryGetValue(connectionId, out var existingPlayer);
-            _players.TryUpdate(connectionId, player, existingPlayer ?? new Models.Player());
+            _players.TryGetValue(id, out var existingPlayer);
+            _players.TryUpdate(id, player, existingPlayer ?? new Models.Player());
         }
         return player;
     }
 
-    public IPlayer? GetPlayer(string connectionId)
+    public IPlayer? GetPlayer(string guid)
     {
-        _players.TryGetValue(connectionId, out var player);
+        if (!Guid.TryParse(guid, out var id))
+        {
+            return null;
+        }
+        _players.TryGetValue(id, out var player);
         return player;
     }
 
-    public string? UpdatePlayerName(string name, string connectionId)
+    public string? UpdatePlayerName(string name, string id)
     {
-        var player = GetPlayer(connectionId);
+        var player = GetPlayer(id);
         if (player is null)
         {
             throw new ApplicationException("Player with matching connection id does not exist");

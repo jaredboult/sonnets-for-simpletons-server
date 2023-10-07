@@ -1,4 +1,5 @@
 using SonnetsForSimpletonsServer.Player.Models;
+using SonnetsForSimpletonsServer.Player.Responses;
 
 namespace SonnetsForSimpletonsServer.Player;
 
@@ -12,7 +13,7 @@ public interface IPlayerFacade
     /// <param name="name">The name to check before updating</param>
     /// <param name="connectionId">The connection string of the player</param>
     /// <returns>Returns the trimmed and validated name if successful, null otherwise</returns>
-    public string? UpdatePlayerName(string name, string connectionId);
+    public string? UpdatePlayerName(string name, string id);
 
     /// <summary>
     /// Retrieves the Player object that corresponds to a given connectionId

@@ -1,26 +1,28 @@
+using SonnetsForSimpletonsServer.Game.Models;
+
 namespace SonnetsForSimpletonsServer.Game;
 
-public class QuestionFacade
+public class QuestionFacade : IQuestionFacade
 {
-    private List<(string, string)> _questions =
+    private List<IQuestion> _questions =
     new() {
-        ("Quiz", "Pop Quiz"),
-        ("Side", "Bedside"),
-        ("Love", "LoveLetter"),
-        ("Mind", "Mind Reader"),
-        ("Tongue", "Tongue-tied"),
-        ("Skin", "Snake Skin")
+        new Question("Quiz", "Pop Quiz"),
+        new Question("Side", "Bedside"),
+        new Question("Love", "LoveLetter"),
+        new Question("Mind", "Mind Reader"),
+        new Question("Tongue", "Tongue-tied"),
+        new Question("Skin", "Snake Skin")
     };
 
-    private List<(string, string)> _completedQuestions = new();
+    private List<IQuestion> _completedQuestions = new();
     private readonly Random _randomNumberGenerator = new();
 
-    public (string, string) GetQuestion()
+    public IQuestion GetQuestion()
     {
         if (_questions.Count == 0)
         {
             _questions = _completedQuestions;
-            _completedQuestions = new List<(string, string)>();
+            _completedQuestions = new List<IQuestion>();
         }
         var index = _randomNumberGenerator.Next(0, _questions.Count);
         var question = _questions[index];
