@@ -3,20 +3,20 @@ using SonnetsForSimpletonsServer.Player.Models;
 
 namespace SonnetsForSimpletonsServer.Game;
 
-public class SonnetsForSimpletons : IGame
+public class FourOrMorePlayersGame : IGame
 {
-    private readonly IQuestionFacade _questionsFacade;
     private IList<IPlayer> _teamOne = new List<IPlayer>();
     private IList<IPlayer> _teamTwo = new List<IPlayer>();
     
     public string Name => "Sonnets for Simpletons";
     public GameProgress Progress { get; set; } = GameProgress.Initialising;
     public Dictionary<IPlayer, int> Scores { get; set; } = new ();
+    public IQuestionFacade QuestionFacade { get; init; }
     
 
-    public SonnetsForSimpletons(IQuestionFacade questionFacade)
+    public FourOrMorePlayersGame(IQuestionFacade questionFacade)
     {
-        _questionsFacade = questionFacade;
+        QuestionFacade = questionFacade;
     }
 
     public void SetRandomTeams(IEnumerable<IPlayer> players)

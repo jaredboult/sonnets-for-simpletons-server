@@ -8,4 +8,5 @@ public interface IGame
     public string Name { get; }
     public GameProgress Progress { get; set; }
     public Dictionary<IPlayer, int> Scores { get; set; }
+    public IQuestionFacade QuestionFacade { get; init; }
 }

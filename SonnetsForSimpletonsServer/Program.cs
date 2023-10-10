@@ -36,7 +36,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.MapHub<LobbyHub>("connect");
-app.MapHub<SonnetsForSimpletonsHub>("sonnets");
+app.MapHub<LobbyHub>("lobby");
+app.MapHub<GameHub>("game");
 
 app.Run();
