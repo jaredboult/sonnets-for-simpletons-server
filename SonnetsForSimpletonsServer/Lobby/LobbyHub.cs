@@ -27,13 +27,8 @@ public class LobbyHub : Hub<ILobbyClient>
             response.Success = true;
             response.Description = $"Room {response.RoomId} was created";
             response.RoomId = room.RoomCode;
-            
-            await Clients.Caller.SavePlayerId(new PlayerResponse
-            {
-                Success = true,
-                Description = "Store this unique id to persist your identity",
-                Id = player.Id.ToString()
-            });
+
+            await SendNewPlayerId(player.Id.ToString());
             await Groups.AddToGroupAsync(Context.ConnectionId, room.RoomCode);
         }
         catch (ApplicationException ex)
@@ -46,10 +41,21 @@ public class LobbyHub : Hub<ILobbyClient>
         return response;
     }
 
+    private async Task SendNewPlayerId(string guid)
+    {
+        await Clients.Caller.SavePlayerId(new PlayerResponse
+        {
+            Success = true,
+            Description = "Store this unique id to persist your identity",
+            Id = guid
+        });
+    }
+
     public async Task<RoomResponse> JoinRoom(string roomId)
     {
         var response = new RoomResponse();
         var joiner = _playerFacade.CreatePlayer(Context.ConnectionId);
+        await SendNewPlayerId(joiner.Id.ToString());
         if (_roomFacade.JoinRoom(joiner, roomId))
         {
             response.Success = true;

@@ -4,5 +4,5 @@ namespace SonnetsForSimpletonsServer.Game.Responses;
 
 public class GameResponse : GeneralResponse
 {
-    
+    public string? TeamName { get; set; }
 }

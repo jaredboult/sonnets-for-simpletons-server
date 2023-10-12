@@ -5,8 +5,8 @@ namespace SonnetsForSimpletonsServer.Game;
 
 public class FourOrMorePlayersGame : IGame
 {
-    private IList<IPlayer> _teamOne = new List<IPlayer>();
-    private IList<IPlayer> _teamTwo = new List<IPlayer>();
+    public IList<IPlayer> TeamOne { get; private set; } = new List<IPlayer>();
+    public IList<IPlayer> TeamTwo { get; private set; } = new List<IPlayer>();
     
     public string Name => "Sonnets for Simpletons";
     public GameProgress Progress { get; set; } = GameProgress.Initialising;
@@ -23,8 +23,8 @@ public class FourOrMorePlayersGame : IGame
     {
         var shuffled = ShuffleList(players);
         var teams = SplitPlayersIntoTeams(shuffled, 2);
-        _teamOne = teams[0];
-        _teamTwo = teams[1];
+        TeamOne = teams[0];
+        TeamTwo = teams[1];
     }
 
     public void StartGame()
@@ -54,7 +54,7 @@ public class FourOrMorePlayersGame : IGame
         return clonedList;
     }
 
-    private static IList<IPlayer[]> SplitPlayersIntoTeams(IList<IPlayer> players, int numberOfTeams)
+    private static IList<IPlayer[]> SplitPlayersIntoTeams(ICollection<IPlayer> players, int numberOfTeams)
     {
         if (numberOfTeams < 1 || numberOfTeams > players.Count)
         {

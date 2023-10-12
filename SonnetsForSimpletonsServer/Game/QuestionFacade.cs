@@ -8,7 +8,7 @@ public class QuestionFacade : IQuestionFacade
     new() {
         new Question("Quiz", "Pop Quiz"),
         new Question("Side", "Bedside"),
-        new Question("Love", "LoveLetter"),
+        new Question("Love", "Love Letter"),
         new Question("Mind", "Mind Reader"),
         new Question("Tongue", "Tongue-tied"),
         new Question("Skin", "Snake Skin")
