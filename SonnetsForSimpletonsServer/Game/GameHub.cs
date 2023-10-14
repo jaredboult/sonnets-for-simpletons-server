@@ -39,7 +39,7 @@ public class GameHub : Hub<IGameClient>
             return response;
         }
 
-        var game = new FourOrMorePlayersGame(new QuestionFacade());
+        var game = new FourPlusPlayerGame(new QuestionFacade());
         room.Game = game;
         await SetUpTeams(game, room);
         
@@ -50,14 +50,15 @@ public class GameHub : Hub<IGameClient>
         return response;
     }
 
-    private async Task SetUpTeams(FourOrMorePlayersGame game, IRoom room)
+    private async Task SetUpTeams(FourPlusPlayerGame game, IRoom room)
     {
         game.SetRandomTeams(room.Players);
-        var firstGroupName = $"{room.RoomCode}_TeamOne";
-        var secondGroupName = $"{room.RoomCode}_TeamTwo";
-        await AddPlayersToGroup(game.TeamOne, firstGroupName, "Team One");
-        await AddPlayersToGroup(game.TeamTwo, secondGroupName, "Team Two");
-        
+        for (var i = 0; i < game.NumberOfTeams; i++)
+        {
+            var groupNameForHub = $"{room.RoomCode}_Team{i + 1}";
+            var teamNameForClient = $"Team {i + 1}";
+            await AddPlayersToGroup(game.Teams[i].Players, groupNameForHub, teamNameForClient);
+        }
     }
 
     private async Task AddPlayersToGroup(IEnumerable<IPlayer> players, string groupNameForHub, string teamNameForClient)

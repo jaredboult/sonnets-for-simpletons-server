@@ -1,12 +1,13 @@
-using SonnetsForSimpletonsServer.Player.Models;
 using SonnetsForSimpletonsServer.Game.Models;
 
 namespace SonnetsForSimpletonsServer.Game;
 
 public interface IGame
 {
-    public string Name { get; }
-    public GameProgress Progress { get; set; }
-    public Dictionary<IPlayer, int> Scores { get; set; }
-    public IQuestionFacade QuestionFacade { get; init; }
+    string Name { get; }
+    byte NumberOfRounds { get; }
+    GameProgress Progress { get; set; }
+    IQuestionFacade QuestionFacade { get; init; }
+    void StartGame();
+    void EndGame();
 }

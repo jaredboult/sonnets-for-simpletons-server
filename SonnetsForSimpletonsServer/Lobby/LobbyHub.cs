@@ -135,7 +135,26 @@ public class LobbyHub : Hub<ILobbyClient>
             response.Success = false;
             response.Description = "Room does not exist";
         }
+        return response;
+    }
 
+    public async Task<GeneralResponse> StartGameForRoom(string roomId, string playerGuid)
+    {
+        var response = new GeneralResponse();
+        var room = _roomFacade.GetRoom(roomId);
+        var player = _playerFacade.GetPlayer(playerGuid);
+        if (room is null || player is null || !room.Players.Contains(player))
+        {
+            response.Success = false;
+            response.Description = "Unable to start the game";
+            
+        }
+        else
+        {
+            response.Success = true;
+            response.Description = "Starting the game";
+            await Clients.OthersInGroup(roomId).StartGame(response);
+        }
         return response;
     }
 }
